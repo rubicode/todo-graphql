@@ -4,6 +4,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const mongoose = require('mongoose')
 const cors = require('cors')
+var { graphqlHTTP } = require('express-graphql');
+var {schema, root} = require('./graphql/TodoSchema');
 
 main().catch(err => console.log(err));
 
@@ -27,5 +29,11 @@ app.use(cors())
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/todos', todosRouter);
+
+app.use('/graphql', graphqlHTTP({
+  schema: schema,
+  rootValue: root,
+  graphiql: true,
+}));
 
 module.exports = app;
